@@ -1,0 +1,43 @@
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    environment:
+      - 'RABBITMQ_DEFAULT_PASS=secret'
+      - 'RABBITMQ_DEFAULT_USER=myuser'
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - pedido-network
+    volumes:
+      - rabbitmq-data:/data/rabbit-mq
+
+#  pedido-receiver:
+#    container_name: pedido-receiver
+#    image: pedido-receiver
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    links:
+#      - rabbitmq
+#    depends_on:
+#      - rabbitmq
+#    networks:
+#      - pedido-network
+#    volumes:
+#      - pedido-data:/data/pedido
+#    environment:
+#      - RABBITMQ_USERNAME=myuser
+#      - RABBITMQ_PASS=secret
+#    ports:
+#      - 8080:8080
+#    restart: always
+
+networks:
+  pedido-network:
+
+volumes:
+  rabbitmq-data:
+  pedido-data:

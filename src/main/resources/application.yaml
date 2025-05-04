@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: pedido-receiver
+  rabbitmq:
+    host: rabbitmq
+    username: ${RABBITMQ_USERNAME:userNotFound}
+    password: ${RABBITMQ_PASS:passNotFound}
+server:
+  port: 8080
