@@ -14,26 +14,26 @@ services:
     volumes:
       - rabbitmq-data:/data/rabbit-mq
 
-#  pedido-receiver:
-#    container_name: pedido-receiver
-#    image: pedido-receiver
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    links:
-#      - rabbitmq
-#    depends_on:
-#      - rabbitmq
-#    networks:
-#      - pedido-network
-#    volumes:
-#      - pedido-data:/data/pedido
-#    environment:
-#      - RABBITMQ_USERNAME=myuser
-#      - RABBITMQ_PASS=secret
-#    ports:
-#      - 8080:8080
-#    restart: always
+  pedido-receiver:
+    container_name: pedido-receiver
+    image: pedido-receiver
+    build:
+      context: .
+      dockerfile: Dockerfile
+    links:
+      - rabbitmq
+    depends_on:
+      - rabbitmq
+    networks:
+      - pedido-network
+    volumes:
+      - pedido-data:/data/pedido
+    environment:
+      - RABBITMQ_USERNAME=myuser
+      - RABBITMQ_PASS=secret
+    ports:
+      - 8080:8080
+    restart: always
 
 networks:
   pedido-network:
