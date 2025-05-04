@@ -1,4 +1,4 @@
-package com.fiap.tc4_srv_pedido_receiver.controller;
+package com.fiap.tc4_srv_pedido_receiver.domain;
 
 import java.util.Optional;
 

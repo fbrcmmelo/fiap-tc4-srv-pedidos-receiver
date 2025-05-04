@@ -1,7 +1,5 @@
 package com.fiap.tc4_srv_pedido_receiver.domain;
 
-import com.fiap.tc4_srv_pedido_receiver.controller.DadosCartaoCliente;
-import com.fiap.tc4_srv_pedido_receiver.controller.ProdutoPedido;
 import lombok.Getter;
 
 import java.util.ArrayList;

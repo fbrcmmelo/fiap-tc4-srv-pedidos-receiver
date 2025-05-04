@@ -19,20 +19,20 @@ public class RabbitMqConnectionConfig {
         this.amqpAdmin = amqpAdmin;
     }
 
-    private Queue queue(String queueName) {
+    public Queue queue(String queueName) {
         return new Queue(queueName, true, false, false);
     }
 
-    private DirectExchange exchange(String exchangeName) {
+    public DirectExchange exchange(String exchangeName) {
         return new DirectExchange(exchangeName);
     }
 
-    private Binding binding(Queue queue, DirectExchange exchange) {
+    public Binding binding(Queue queue, DirectExchange exchange) {
         return new Binding(queue.getName(), DestinationType.QUEUE, exchange.getName(), queue.getName(), null);
     }
 
     @PostConstruct
-    void setUpQueuesAndExchanges() {
+    public void setUpQueuesAndExchanges() {
         amqpAdmin.declareQueue(queue(FilaConstants.PEDIDO_QUEUE));
         amqpAdmin.declareExchange(exchange(ExchangeConstants.DIRECT));
         amqpAdmin.declareBinding(binding(queue(FilaConstants.PEDIDO_QUEUE), exchange(ExchangeConstants.DIRECT)));
