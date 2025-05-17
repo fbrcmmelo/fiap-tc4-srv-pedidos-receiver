@@ -1,7 +1,7 @@
 package com.fiap.tc4_srv_pedido_receiver.controller;
 
 
-import com.fiap.tc4_srv_pedido_receiver.usecases.IFazerPedidoUseCase;
+import com.fiap.tc4_srv_pedido_receiver.usecases.IEnviarPedidoUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/pedidos", produces = "application/json")
 public class PedidoReceiverController {
 
-    private final IFazerPedidoUseCase fazerPedidoUseCase;
+    private final IEnviarPedidoUseCase enviarPedidoUseCase;
 
     @PostMapping
-    public ResponseEntity<Void> makeOrder(@RequestBody FazerPedidoRequest request) {
+    public ResponseEntity<Void> makeOrder(@RequestBody EnviarPedidoRequest request) {
         try {
-            this.fazerPedidoUseCase.fazerPedido(request);
+            this.enviarPedidoUseCase.enviarPedido(request);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception ex) {
             log.error("Erro ao tentar realizar o pedido, erro: {}", ex.getMessage());

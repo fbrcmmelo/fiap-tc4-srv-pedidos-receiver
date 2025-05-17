@@ -20,7 +20,7 @@ class FazerPedidoServiceTest {
     private RabbitMqServiceAdapter adapter;
 
     @InjectMocks
-    private FazerPedidoService fazerPedidoService;
+    private EnviarPedidoService fazerPedidoService;
 
     private Pedido samplePedido;
 
@@ -36,7 +36,7 @@ class FazerPedidoServiceTest {
         // Arrange
 
         // Act
-        fazerPedidoService.criarPedido(samplePedido);
+        fazerPedidoService.enviarPedido(samplePedido);
 
         // Assert
         verify(adapter).send(FilaConstants.PEDIDO_QUEUE, samplePedido);

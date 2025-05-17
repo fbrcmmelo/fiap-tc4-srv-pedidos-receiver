@@ -3,7 +3,7 @@ package com.fiap.tc4_srv_pedido_receiver.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiap.tc4_srv_pedido_receiver.domain.DadosCartaoCliente;
 import com.fiap.tc4_srv_pedido_receiver.domain.ProdutoPedido;
-import com.fiap.tc4_srv_pedido_receiver.usecases.IFazerPedidoUseCase;
+import com.fiap.tc4_srv_pedido_receiver.usecases.IEnviarPedidoUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class PedidoReceiverControllerTest {
 
     @Mock
-    private IFazerPedidoUseCase fazerPedidoUseCase;
+    private IEnviarPedidoUseCase fazerPedidoUseCase;
     @InjectMocks
     private PedidoReceiverController pedidoReceiverController;
 
@@ -41,10 +41,10 @@ class PedidoReceiverControllerTest {
     @Test
     void makeOrder_Success() throws Exception {
         // Arrange
-        final var request = new FazerPedidoRequest("1", new DadosCartaoCliente("123432"),
+        final var request = new EnviarPedidoRequest("1", new DadosCartaoCliente("123432"),
                 List.of(new ProdutoPedido("sku-1", 5L)));
 
-        doNothing().when(fazerPedidoUseCase).fazerPedido(any(FazerPedidoRequest.class));
+        doNothing().when(fazerPedidoUseCase).enviarPedido(any(EnviarPedidoRequest.class));
 
         // Act & Assert
         mockMvc.perform(post("/pedidos")
@@ -52,16 +52,16 @@ class PedidoReceiverControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk());
 
-        verify(fazerPedidoUseCase, times(1)).fazerPedido(any(FazerPedidoRequest.class));
+        verify(fazerPedidoUseCase, times(1)).enviarPedido(any(EnviarPedidoRequest.class));
     }
 
     @Test
     void makeOrder_Failure() throws Exception {
         // Arrange
-        final var invalidRequest = new FazerPedidoRequest(null, new DadosCartaoCliente("123432"), null);
+        final var invalidRequest = new EnviarPedidoRequest(null, new DadosCartaoCliente("123432"), null);
 
         doThrow(new RuntimeException("Test Exception")).when(fazerPedidoUseCase)
-                .fazerPedido(any(FazerPedidoRequest.class));
+                .enviarPedido(any(EnviarPedidoRequest.class));
 
         // Act & Assert
         mockMvc.perform(post("/pedidos")
@@ -69,6 +69,6 @@ class PedidoReceiverControllerTest {
                         .content(objectMapper.writeValueAsString(invalidRequest)))
                 .andExpect(status().isUnprocessableEntity());
 
-        verify(fazerPedidoUseCase, times(1)).fazerPedido(any(FazerPedidoRequest.class));
+        verify(fazerPedidoUseCase, times(1)).enviarPedido(any(EnviarPedidoRequest.class));
     }
 }
