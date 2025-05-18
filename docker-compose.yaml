@@ -10,24 +10,21 @@ services:
       - 5672:5672
       - 15672:15672
     networks:
-      - pedido-network
+      - srv-pedido-network
     volumes:
       - rabbitmq-data:/data/rabbit-mq
 
-  pedido-receiver:
-    container_name: pedido-receiver
-    image: pedido-receiver
-    build:
-      context: .
-      dockerfile: Dockerfile
+  srv-pedido-receiver:
+    container_name: srv-pedido-receiver
+    image: fmmelo/srv-pedido-receiver
     links:
       - rabbitmq
     depends_on:
       - rabbitmq
     networks:
-      - pedido-network
+      - srv-pedido-receiver-network
     volumes:
-      - pedido-data:/data/pedido
+      - srv-pedido-receiver-data:/data/pedido-receiver
     environment:
       - RABBITMQ_USERNAME=myuser
       - RABBITMQ_PASS=secret
@@ -35,9 +32,115 @@ services:
       - 8080:8080
     restart: always
 
+  srv-pedido-consumer:
+    container_name: srv-pedido-consumer
+    image: fmmelo/srv-pedido-consumer
+    links:
+      - rabbitmq
+      - mongodb-pedido-consumer
+    depends_on:
+      - rabbitmq
+      - mongodb-pedido-consumer
+    networks:
+      - srv-pedido-consumer-network
+    volumes:
+      - srv-pedido-consumer-data:/data/pedido-consumer
+    environment:
+      - RABBITMQ_USERNAME=myuser
+      - RABBITMQ_PASS=secret
+      - MONGODB_USERNAME=root
+      - MONGODB_PASS=rootpass
+    ports:
+      - 8081:8081
+    restart: always
+
+  mongodb-pedido-consumer:
+    image: mongo:latest  
+    container_name: mongodb-pedido-consumer
+    ports:
+      - "27019:27017"  
+    volumes:
+      - mongodb-pedido-consumer-data:/data/db  
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root  
+      - MONGO_INITDB_ROOT_PASSWORD=rootpass  
+    networks:
+      - srv-pedido-consumer-network
+
+  srv-estoque:
+    container_name: srv-estoque
+    image: fmmelo/srv-estoque
+    links:
+      - mongodb-estoque
+    depends_on:
+      - mongodb-estoque
+    networks:
+      - srv-estoque-network
+    volumes:
+      - srv-estoque-data:/data/estoque
+    environment:
+      - MONGODB_USERNAME=root
+      - MONGODB_PASS=rootpass
+    ports:
+      - 8082:8082
+    restart: always
+
+  mongodb-estoque:
+    image: mongo:latest  
+    container_name: mongodb-estoque
+    ports:
+      - "27020:27017"
+    volumes:
+      - mongodb-estoque-data:/data/db  
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root  
+      - MONGO_INITDB_ROOT_PASSWORD=rootpass  
+    networks:
+      - srv-estoque-network
+
+  srv-pagamento:
+    container_name: srv-pagamento
+    image: fmmelo/srv-pagamento
+    links:
+      - mongodb-pagamento
+    depends_on:
+      - mongodb-pagamento
+    networks:
+      - srv-pagamento-network
+    volumes:
+      - srv-pagamento-data:/data/pagamentos
+    environment:
+      - MONGODB_USERNAME=root
+      - MONGODB_PASS=rootpass
+    ports:
+      - 8083:8083
+    restart: always
+
+  mongodb-pagamento:
+    image: mongo:latest  
+    container_name: mongodb-pagamento
+    ports:
+      - "27021:27017"
+    volumes:
+      - mongodb-pagamento-data:/data/db  
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root  
+      - MONGO_INITDB_ROOT_PASSWORD=rootpass  
+    networks:
+      - srv-pagamento-network
+
 networks:
-  pedido-network:
+  srv-pedido-receiver-network:
+  srv-pedido-consumer-network:
+  srv-estoque-network:
+  srv-pagamento-network:
 
 volumes:
   rabbitmq-data:
-  pedido-data:
+  srv-pedido-receiver-data:
+  srv-pedido-consumer-data:
+  mongodb-pedido-consumer-data:
+  srv-pagamento-data:
+  mongodb-pagamento-data:
+  srv-estoque-data:
+  mongodb-estoque-data:
