@@ -16,13 +16,13 @@ services:
 
   srv-pedido-receiver:
     container_name: srv-pedido-receiver
-    image: fmmelo/srv-pedido-receiver
+    image: fmmelo/srv-pedido-receiver:1.0.0
     links:
       - rabbitmq
     depends_on:
       - rabbitmq
     networks:
-      - srv-pedido-receiver-network
+      - srv-pedido-network
     volumes:
       - srv-pedido-receiver-data:/data/pedido-receiver
     environment:
@@ -34,7 +34,7 @@ services:
 
   srv-pedido-consumer:
     container_name: srv-pedido-consumer
-    image: fmmelo/srv-pedido-consumer
+    image: fmmelo/srv-pedido-consumer:1.0.0
     links:
       - rabbitmq
       - mongodb-pedido-consumer
@@ -42,7 +42,7 @@ services:
       - rabbitmq
       - mongodb-pedido-consumer
     networks:
-      - srv-pedido-consumer-network
+      - srv-pedido-network
     volumes:
       - srv-pedido-consumer-data:/data/pedido-consumer
     environment:
@@ -65,17 +65,17 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=root  
       - MONGO_INITDB_ROOT_PASSWORD=rootpass  
     networks:
-      - srv-pedido-consumer-network
+      - srv-pedido-network
 
   srv-estoque:
     container_name: srv-estoque
-    image: fmmelo/srv-estoque
+    image: fmmelo/srv-estoque:1.0.0
     links:
       - mongodb-estoque
     depends_on:
       - mongodb-estoque
     networks:
-      - srv-estoque-network
+      - srv-pedido-network
     volumes:
       - srv-estoque-data:/data/estoque
     environment:
@@ -96,17 +96,17 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=root  
       - MONGO_INITDB_ROOT_PASSWORD=rootpass  
     networks:
-      - srv-estoque-network
+      - srv-pedido-network
 
   srv-pagamento:
     container_name: srv-pagamento
-    image: fmmelo/srv-pagamento
+    image: fmmelo/srv-pagamento:1.0.0
     links:
       - mongodb-pagamento
     depends_on:
       - mongodb-pagamento
     networks:
-      - srv-pagamento-network
+      - srv-pedido-network
     volumes:
       - srv-pagamento-data:/data/pagamentos
     environment:
@@ -127,13 +127,10 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=root  
       - MONGO_INITDB_ROOT_PASSWORD=rootpass  
     networks:
-      - srv-pagamento-network
+      - srv-pedido-network
 
 networks:
-  srv-pedido-receiver-network:
-  srv-pedido-consumer-network:
-  srv-estoque-network:
-  srv-pagamento-network:
+  srv-pedido-network:
 
 volumes:
   rabbitmq-data:
