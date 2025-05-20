@@ -129,6 +129,76 @@ services:
     networks:
       - srv-pedido-network
 
+  srv-cliente:
+    container_name: srv-cliente
+    image: fmmelo/srv-cliente:1.0.0
+    links:
+      - db-cliente
+    depends_on:
+      - db-cliente
+    networks:
+      - srv-pedido-network
+    volumes:
+      - srv-cliente-data:/data/clientes
+    environment:
+      - MYSQL_URL=jdbc:mysql://db-cliente/clientesdb
+      - MYSQL_DATABASE=clientesdb
+      - MYSQL_USER=fiap
+      - MYSQL_PASSWORD=fiap123
+    ports:
+      - "8085:8085"
+    restart: always
+
+  db-cliente:
+    image: mysql:latest
+    container_name: db-cliente
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=clientesdb
+      - MYSQL_USERNAME=fiap
+      - MYSQL_PASSWORD=fiap123
+    volumes:
+      - db-cliente-data:/var/lib/mysql
+    networks:
+      - srv-pedido-network
+
+  srv-produto:
+    container_name: srv-produto
+    image: fmmelo/srv-produto:1.0.0
+    links:
+      - db-produto
+    depends_on:
+      - db-produto
+    networks:
+      - srv-pedido-network
+    volumes:
+      - srv-produto-data:/data/produtos
+    environment:
+      - MYSQL_URL=jdbc:mysql://db-produto/produtosdb
+      - MYSQL_DATABASE=produtosdb
+      - MYSQL_USERNAME=admin
+      - MYSQL_PASSWORD=adminpass
+    ports:
+      - "8086:8086"
+    restart: always
+
+  db-produto:
+    image: postgres:latest
+    container_name: db-produto
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=produtosdb
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=adminpass
+    volumes:
+      - db-produto-data:/var/lib/postgresql/data
+    networks:
+      - srv-pedido-network
+
 networks:
   srv-pedido-network:
 
@@ -141,3 +211,7 @@ volumes:
   mongodb-pagamento-data:
   srv-estoque-data:
   mongodb-estoque-data:
+  srv-cliente-data:
+  db-cliente-data:
+  srv-produto-data:
+  db-produto-data:
