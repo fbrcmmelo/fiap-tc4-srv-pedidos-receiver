@@ -34,7 +34,7 @@ services:
 
   srv-pedido-consumer:
     container_name: srv-pedido-consumer
-    image: fmmelo/srv-pedido-consumer:1.0.0
+    image: fmmelo/srv-pedido-consumer:1.0.1
     links:
       - rabbitmq
       - mongodb-pedido-consumer
@@ -185,7 +185,7 @@ services:
     restart: always
 
   db-produto:
-    image: postgres:latest
+    image: mysql:latest
     container_name: db-produto
     ports:
       - "3307:3306"
