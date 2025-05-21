@@ -132,8 +132,6 @@ services:
   srv-cliente:
     container_name: srv-cliente
     image: harisantana/srv-cliente:1.0.0
-    links:
-      - db-cliente
     depends_on:
       - db-cliente
     networks:
@@ -143,8 +141,8 @@ services:
     environment:
       - MYSQL_URL=jdbc:mysql://db-cliente/clientesdb
       - MYSQL_DATABASE=clientesdb
-      - MYSQL_USER=fiap
-      - MYSQL_PASSWORD=fiap123
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=adminpass
     ports:
       - "8085:8085"
     restart: always
@@ -157,8 +155,8 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=clientesdb
-      - MYSQL_USERNAME=fiap
-      - MYSQL_PASSWORD=fiap123
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=adminpass
     volumes:
       - db-cliente-data:/var/lib/mysql
     networks:
@@ -167,8 +165,6 @@ services:
   srv-produto:
     container_name: srv-produto
     image: harisantana/srv-produto:1.0.0
-    links:
-      - db-produto
     depends_on:
       - db-produto
     networks:
@@ -178,7 +174,7 @@ services:
     environment:
       - MYSQL_URL=jdbc:mysql://db-produto/produtosdb
       - MYSQL_DATABASE=produtosdb
-      - MYSQL_USERNAME=admin
+      - MYSQL_USER=admin
       - MYSQL_PASSWORD=adminpass
     ports:
       - "8086:8086"
@@ -195,7 +191,7 @@ services:
       - MYSQL_USER=admin
       - MYSQL_PASSWORD=adminpass
     volumes:
-      - db-produto-data:/var/lib/postgresql/data
+      - db-produto-data:/var/lib/mysql
     networks:
       - srv-pedido-network
 
