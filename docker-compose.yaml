@@ -131,7 +131,7 @@ services:
 
   srv-cliente:
     container_name: srv-cliente
-    image: fmmelo/srv-cliente:1.0.0
+    image: harisantana/srv-cliente:1.0.0
     links:
       - db-cliente
     depends_on:
@@ -166,7 +166,7 @@ services:
 
   srv-produto:
     container_name: srv-produto
-    image: fmmelo/srv-produto:1.0.0
+    image: harisantana/srv-produto:1.0.0
     links:
       - db-produto
     depends_on:
