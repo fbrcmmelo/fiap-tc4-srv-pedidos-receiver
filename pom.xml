@@ -111,9 +111,6 @@
 						<goals>
 							<goal>report</goal>
 						</goals>
-						<configuration>
-							<outputDirectory>${project.basedir}/jacoco</outputDirectory>
-						</configuration>
 					</execution>
 					<execution>
 						<id>jacoco-check</id>
